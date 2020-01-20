@@ -1,0 +1,155 @@
+---
+layout: main
+---
+
+<header>
+    <h1>A Mole Is A Unit</h1>
+    <h4>By Crowley, Devin and Feng, Edward</h4>
+</header>
+
+<section>
+    <span>View our lab report:</span>
+    &nbsp;
+    <a class="btn btn-dark" href="#pdf" role="button">
+        <i class="fas fa-file-pdf"></i>
+        &nbsp;PDF
+    </a>
+    <a class="btn btn-dark" href="#html" role="button">
+        <i class="fas fa-globe"></i>
+        &nbsp;WEB
+    </a>
+</section>
+
+<hr />
+
+<section>
+    <p>
+        Lorem ipsum dorlor sit amet.
+        \[
+        \frac{4 \text{ cm}}{32 \text{ t-shirts}}
+        = \frac{1}{8} \text{ cm per t-shirt.}
+        \]
+        More test information.
+    </p>
+</section>
+
+<hr />
+
+<section>
+    <h3>A Calculator</h3>
+    <form>
+        <div class="form-row">
+            <div class="form-group col-6 col-md-9">
+                <label for="quantity">Quantity</label>
+                <input type="text" class="form-control" id="quantity" placeholder="1" oninput="update('quantity');">
+            </div>
+            <div class="form-group col-6 col-md-3">
+                <label for="quantityUnit">Select Unit</label>
+                <select class="form-control" id="quantityUnit" oninput="updateUnit('quantity');">
+                    <option value="1">Singular</option>
+                    <option value="12">Dozen</option>
+                    <option value="6.02e23">Mole</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-6 col-md-9">
+                <label for="length">Length</label>
+                <input type="text" class="form-control" id="length" oninput="update('length');">
+            </div>
+            <div class="form-group col-6 col-md-3">
+                <label for="lengthUnit">Select Unit</label>
+                <select class="form-control" id="lengthUnit" oninput="updateUnit('length');">
+                    <option value="1">cm</option>
+                    <option value="1e5">km</option>
+                    <option value="160934">mi</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-6 col-md-9">
+                <label for="people">People</label>
+                <input type="text" class="form-control" id="people" oninput="update('people');">
+            </div>
+            <div class="form-group col-6 col-md-3">
+                <label for="peopleUnit">Select Unit</label>
+                <select class="form-control" id="peopleUnit" oninput="updateUnit('people');">
+                    <option value="1">Singular</option>
+                    <option value="3.29e8">US</option>
+                    <option value="7.625e9">Planet</option>
+                </select>
+            </div>
+        </div>
+    </form>
+    
+    <script>
+        // How much $x (base) is in one shirt?
+        var params = {
+            "quantity": 1,
+            "length": 8,
+            "people": 10
+        }
+        
+        // History for changing units
+        var previousUnits = {
+            "quantity": 0,
+            "length": 0,
+            "people": 0
+        }
+        
+        function update(from) {
+            update(from, false);
+        }
+        
+        function update(from, updateSame) {
+            // Handle input change
+            var amt = document.getElementById(from).value;
+            var el = document.getElementById(from + "Unit");
+            amt *= el.options[el.selectedIndex].value;
+            
+            var qty = amt * params[from]
+            
+            for (var key in params) {
+                if (updateSame || key != from) {
+                    change(key, qty / params[key]);
+                }
+            }
+        }
+        
+        function updateUnit(from) {
+            // Change unit of `from`, keeping overall value same
+            var amt = document.getElementById(from).value;
+            var el = document.getElementById(from + "Unit");
+            amt *= el.options[previousUnits[from]].value;
+            amt /= el.options[el.selectedIndex].value;
+            document.getElementById(from).value = amt;
+            
+            previousUnits[from] = el.selectedIndex;
+            
+            update(from, true)
+        }
+        
+        function change(to, base) {
+            // Recieve command to update value of `to`
+            var el = document.getElementById(to + "Unit");
+            var amt = base / el.options[el.selectedIndex].value;
+            
+            // Keep numbers (fairly) short
+            if (Math.abs(amt.toExponential().split("e")[1]) > 6) {
+                if (amt.toExponential(10).length < amt.toExponential().length) {
+                    amt = amt.toExponential(10);
+                } else {
+                    amt = amt.toExponential();
+                }
+            } else {
+                if (amt.toPrecision(10).length < amt.toPrecision().length) {
+                    amt = parseFloat(amt.toPrecision(10));
+                } else {
+                    amt = parseFloat(amt.toPrecision());
+                }
+            }
+            
+            document.getElementById(to).value = amt;
+        }
+    </script>
+</section>
