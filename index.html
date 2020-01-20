@@ -26,7 +26,7 @@ layout: main
     <header>
         <h5>Shirts</h5>
     </header>
-    
+
     <p>
         If we had a mole of t-shirts, we'd have quite a lot of shirts.
         But what exactly is the scale of \( 6.02 \times 10^{23} \) tshirts?
@@ -59,7 +59,7 @@ layout: main
         <div class="form-row">
             <div class="form-group col-6 col-md-9">
                 <label for="quantity">Quantity</label>
-                <input type="text" class="form-control" id="quantity" placeholder="1" oninput="update('quantity');">
+                <input type="text" class="form-control" id="quantity" oninput="update('quantity');">
             </div>
             <div class="form-group col-6 col-md-3">
                 <label for="quantityUnit">Select Unit</label>
@@ -154,8 +154,8 @@ layout: main
             
             // Keep numbers (fairly) short
             if (Math.abs(amt.toExponential().split("e")[1]) > 6) {
-                if (amt.toExponential(10).length < amt.toExponential().length) {
-                    amt = amt.toExponential(10);
+                if (amt.toExponential(11).length < amt.toExponential().length) {
+                    amt = amt.toExponential(11);
                 } else {
                     amt = amt.toExponential();
                 }
