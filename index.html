@@ -285,7 +285,10 @@ layout: main
             </div>
         </div>
     </form>
-
+    <p class="text-center">
+        <i class="fas fa-info-circle"></i>
+        You can use \(6.02e23\) to enter scientific notation in the calculator.
+    </p>
     <script>
         // How much $x (base) is in one shirt?
         var params = {
@@ -361,6 +364,8 @@ layout: main
         }
     </script>
 </section>
+
+<hr />
 
 <section>
     <h5>Sand</h5>
@@ -485,7 +490,7 @@ function updateSandVis(amt) {
         <hr />
         <div class="form-check">
             <input type="checkbox" class="form-check-input" id="sandVisCheck">
-            <label class="form-check-label" for="sandVisCheck">Automatic visualization</label>
+            <label class="form-check-label" for="sandVisCheck">Automatic visualization (Not recommended)</label>
         </div>
         <div>
             <button class="btn btn-primary" onclick="updateSandManual();">Manual visualization</button>
