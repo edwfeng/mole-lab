@@ -198,21 +198,11 @@ layout: main
     </p>
     
     \[
-    \text{Carbon: } 12.01 \text{ g/mol} 
-    \times 6
-    = 72.06 \text{ g/mol}
-    \]
-    
-    \[
-    \text{Hydrogen: } 1.01 \text{ g/mol} 
-    \times 10
-    = 10.10 \text{ g/mol}
-    \]
-    
-    \[
-    \text{Oxygen: } 16.00 \text{ g/mol} 
-    \times 5
-    = 80.00 \text{ g/mol}
+    \begin{aligned}
+    \text{Carbon: }    &amp; 12.01 \text{ g/mol} \times 6 = 72.06 \text{ g/mol} \\
+    \text{Hydrogen: }  &amp; 1.01 \text{ g/mol} \times 10 = 10.10 \text{ g/mol} \\
+    \text{Oxygen: }    &amp; 16.00 \text{ g/mol} \times 5 = 80.00 \text{ g/mol} \\
+    \end{aligned}
     \]
     
     \[
@@ -370,8 +360,8 @@ layout: main
 <section>
     <h5>Sand</h5>
     <p>
-        <a
-            href="https://www.npr.org/sections/krulwich/2012/09/17/161096233/which-is-greater-the-number-of-sand-grains-on-earth-or-stars-in-the-sky">NPR</a>
+        Let's take a look at another example.
+        <a href="https://www.npr.org/sections/krulwich/2012/09/17/161096233/which-is-greater-the-number-of-sand-grains-on-earth-or-stars-in-the-sky">NPR</a>
         says that there is somewhere around \(7.5 \times 10^{18}\) grains of sand on Earth.
     </p>
     <p><strong>That's a lot!</strong></p>
@@ -470,6 +460,7 @@ function updateSandVis(amt) {
         Say there's
         <span id="sandShirtQty">0</span>
         shirt<span id="sandShirtPlural">s</span>.
+        (This is based on the calculator above)
     </p>
     <p>
         If each shirt was a grain of sand, you would have roughly
@@ -489,7 +480,7 @@ function updateSandVis(amt) {
         It becomes really slow and the idea that "a mole is large" has been made.
         <hr />
         <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="sandVisCheck">
+            <input type="checkbox" class="form-check-input" id="sandVisCheck" onclick="updateSand();">
             <label class="form-check-label" for="sandVisCheck">Automatic visualization (Not recommended)</label>
         </div>
         <div>
