@@ -46,7 +46,7 @@ layout: main
         Avogadro found that in 12 grams of Carbon-12, there are \( 6.02 \times 10^{23} \) Carbon-12 atoms.
         This number has come to be known as a mole. In other words:
     </p>
-    
+
     \[
     12 \text{ grams of Carbon-12 atoms}
     = 6.02 \times 10^{23} \text{ Carbon-12 atoms}
@@ -71,13 +71,13 @@ layout: main
     <header>
         <h6>Size of a Shirt</h6>
     </header>
-    
+
     <p>
         First, lets see how big a shirt really is.
     </p>
-    
+
     <img src="img/imgShirtThickness.jpg" height="400px" align="middle">
-    
+
     <br>
     <p>
         We piled 32 t-shirts on top of each other to get the thickness of a t-shirt.
@@ -86,18 +86,18 @@ layout: main
     <p>
         Some quick conversions give us our results:
     </p>
-    
+
     \[
     \frac{4 \text{ cm}}{32 \text{ t-shirts}}
     = \frac{1}{8} \text{ cm per t-shirt.}
     \]
 </section>
 
-<section>    
+<section>
     <header>
         <h6>How big is a Mole of Shirts?</h6>
     </header>
-    
+
     <p>
         Let's pose two questions to find how big a mole of shirts really is.
     </p>
@@ -115,12 +115,13 @@ layout: main
     \frac{76.25 \text{ t-shirts}}{6.02 \times 10^{23} \text{ t-shirts in total}}
     = .000000000013 \text{\% done}
     \]
-    
+
     <p>
         The question is no longer about if we can complete the job, but how many times over the job can be completed;
-        in other words, to how many Earths full of people can we give give shirts? Let's do some more dimensional analysis:
+        in other words, to how many Earths full of people can we give give shirts? Let's do some more dimensional
+        analysis:
     </p>
-    
+
     \[
     1 \text{ mol shirts}
     &times; \frac{6.02 \times 10^{23} \text{ shirts}}{1 \text{ mol shirts}}
@@ -138,7 +139,7 @@ layout: main
         <div class="form-row">
             <div class="form-group col-6 col-md-9">
                 <label for="quantity">Quantity</label>
-                <input type="text" class="form-control" id="quantity" oninput="update('quantity');">
+                <input type="text" class="form-control" id="quantity" value="0" oninput="update('quantity');">
             </div>
             <div class="form-group col-6 col-md-3">
                 <label for="quantityUnit">Select Unit</label>
@@ -152,7 +153,7 @@ layout: main
         <div class="form-row">
             <div class="form-group col-6 col-md-9">
                 <label for="length">Length</label>
-                <input type="text" class="form-control" id="length" oninput="update('length');">
+                <input type="text" class="form-control" id="length" value="0" oninput="update('length');">
             </div>
             <div class="form-group col-6 col-md-3">
                 <label for="lengthUnit">Select Unit</label>
@@ -166,7 +167,7 @@ layout: main
         <div class="form-row">
             <div class="form-group col-6 col-md-9">
                 <label for="people">People</label>
-                <input type="text" class="form-control" id="people" oninput="update('people');">
+                <input type="text" class="form-control" id="people" value="0" oninput="update('people');">
             </div>
             <div class="form-group col-6 col-md-3">
                 <label for="peopleUnit">Select Unit</label>
@@ -178,7 +179,7 @@ layout: main
             </div>
         </div>
     </form>
-    
+
     <script>
         // How much $x (base) is in one shirt?
         var params = {
@@ -186,33 +187,35 @@ layout: main
             "length": 8,
             "people": 10
         }
-        
+
         // History for changing units
         var previousUnits = {
             "quantity": 0,
             "length": 0,
             "people": 0
         }
-        
+
         function update(from) {
             update(from, false);
         }
-        
+
         function update(from, updateSame) {
             // Handle input change
             var amt = document.getElementById(from).value;
             var el = document.getElementById(from + "Unit");
             amt *= el.options[el.selectedIndex].value;
-            
+
             var qty = amt * params[from]
-            
+
             for (var key in params) {
                 if (updateSame || key != from) {
                     change(key, qty / params[key]);
                 }
             }
+
+            updateSand();
         }
-        
+
         function updateUnit(from) {
             // Change unit of `from`, keeping overall value same
             var amt = document.getElementById(from).value;
@@ -220,33 +223,173 @@ layout: main
             amt *= el.options[previousUnits[from]].value;
             amt /= el.options[el.selectedIndex].value;
             document.getElementById(from).value = amt;
-            
+
             previousUnits[from] = el.selectedIndex;
-            
+
             update(from, true)
         }
-        
+
         function change(to, base) {
             // Recieve command to update value of `to`
             var el = document.getElementById(to + "Unit");
             var amt = base / el.options[el.selectedIndex].value;
-            
-            // Keep numbers (fairly) short
-            if (Math.abs(amt.toExponential().split("e")[1]) > 6) {
-                if (amt.toExponential(11).length < amt.toExponential().length) {
-                    amt = amt.toExponential(11);
+
+            document.getElementById(to).value = formatNumber(amt, 11);
+        }
+
+        function formatNumber(amt, cutoff) {
+            if (Math.abs(amt.toExponential().split("e")[1]) > cutoff) {
+                if (amt.toExponential(cutoff).length < amt.toExponential().length) {
+                    amt = amt.toExponential(cutoff);
                 } else {
                     amt = amt.toExponential();
                 }
             } else {
-                if (amt.toPrecision(10).length < amt.toPrecision().length) {
-                    amt = parseFloat(amt.toPrecision(10));
+                if (amt.toPrecision(cutoff - 1).length < amt.toPrecision().length) {
+                    amt = parseFloat(amt.toPrecision(cutoff - 1));
                 } else {
                     amt = parseFloat(amt.toPrecision());
                 }
             }
-            
-            document.getElementById(to).value = amt;
+            return amt;
         }
     </script>
+</section>
+
+<section>
+    <h5>Sand</h5>
+    <p>
+        <a
+            href="https://www.npr.org/sections/krulwich/2012/09/17/161096233/which-is-greater-the-number-of-sand-grains-on-earth-or-stars-in-the-sky">NPR</a>
+        says that there is somewhere around \(7.5 \times 10^{18}\) grains of sand on Earth.
+    </p>
+    <p><strong>That's a lot!</strong></p>
+    <p>
+        When you go to the beach, it already feels like there's sand everywhere.
+        That doesn't even take into account all the other beaches and deserts and rivers around the world.
+    </p>
+</section>
+
+<script>
+var currentShown = 0;
+var options = [
+    "<i class=\"fas fa-globe-europe  \"></i>",
+    "<i class=\"fas fa-globe-asia    \"></i>",
+    "<i class=\"fas fa-globe-americas\"></i>",
+    "<i class=\"fas fa-globe-africa  \"></i>"
+];
+
+function updateSand() {
+    var amt = document.getElementById("quantity").value;
+    var el = document.getElementById("quantityUnit");
+    amt *= el.options[el.selectedIndex].value;
+
+    updateSandLabels(amt);
+
+    if (document.getElementById("sandVisCheck").checked) {
+        updateSandVis(amt);
+    }
+}
+
+function updateSandManual() {
+    var amt = document.getElementById("quantity").value;
+    var el = document.getElementById("quantityUnit");
+    amt *= el.options[el.selectedIndex].value;
+
+    updateSandLabels(amt);
+
+    updateSandVis(amt);
+}
+
+function updateSandLabels(amt) {
+    document.getElementById("sandShirtQty").innerText = formatNumber(amt, 6);
+    if (amt == 1) {
+        document.getElementById("sandShirtPlural").style.display = "none";
+    } else {
+        document.getElementById("sandShirtPlural").style.display = "inline";
+    }
+
+    var earths = Math.round(amt / 7.5e18);
+    document.getElementById("sandEarthQty").innerText = earths;
+    if (earths == 1) {
+        document.getElementById("sandEarthPlural").style.display = "none";
+    } else {
+        document.getElementById("sandEarthPlural").style.display = "inline";
+    }
+}
+
+function updateSandVis(amt) {
+    var earths = Math.round(amt / 7.5e18);
+    console.log("e: " + earths);
+    console.log("c: " + currentShown);
+    console.log("===============");
+
+    if (earths == 0) {
+        document.getElementById("showSandVisEmpty").style.display = "block";
+    } else {
+        document.getElementById("showSandVisEmpty").style.display = "none";
+    }
+
+    var diff = earths - currentShown;
+    currentShown = earths;
+
+    var visEl = document.getElementById("showSandVis");
+
+    if (diff == 0);
+    else if (diff > 0) {
+        var newInner = [visEl.innerHTML];
+        for (var i = 0; i < diff; i++) {
+            newInner.push(options[Math.floor((Math.random() * options.length))]);
+        }
+        visEl.innerHTML = newInner.join("");
+    } else {
+        var newInner = [];
+        for (var i = 0; i < earths; i++) {
+            newInner.push(options[Math.floor((Math.random() * options.length))]);
+        }
+        visEl.innerHTML = newInner.join("");
+    }
+}
+</script>
+
+<hr />
+
+<section>
+    <p>
+        Say there's
+        <span id="sandShirtQty">0</span>
+        shirt<span id="sandShirtPlural">s</span>.
+    </p>
+    <p>
+        If each shirt was a grain of sand, you would have roughly
+        <span id="sandEarthQty">0</span>
+        Earth<span id="sandEarthPlural">s</span>
+        of sand.
+    </p>
+    
+    <div class="alert alert-warning" role="alert">
+        This visualization is based on the calculator above,
+        and may slow down your browser and make this page freeze for a while.
+        Please wait a couple of seconds.
+        If this does not work, try reloading the page.
+        If <em>that</em> doesn't work, close and reopen this tab.
+        <hr />
+        Also, I don't recommend this visualization for more than one mole.
+        It becomes really slow and the idea that "a mole is large" has been made.
+        <hr />
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="sandVisCheck">
+            <label class="form-check-label" for="sandVisCheck">Automatic visualization</label>
+        </div>
+        <div>
+            <button class="btn btn-primary" onclick="updateSandManual();">Manual visualization</button>
+        </div>
+    </div>
+
+    <p>Here's a visualization, to make things clearer:</p>
+    <div id="showSandVisEmpty">
+        <strong>No Earths yet! Try adding more shirts.</strong>
+    </div>
+    <div id="showSandVis">
+    </div>
 </section>

@@ -23,3 +23,7 @@ form {
 body {
     text-align: justify;
 }
+
+#showSandVis {
+    margin-bottom: 50vh;
+}
